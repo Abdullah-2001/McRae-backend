@@ -8,7 +8,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "https://mc-rae-three.vercel.app/",
+    origin: "https://mc-rae-three.vercel.app",
     credentials: true,
   })
 );
