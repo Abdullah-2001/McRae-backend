@@ -25,14 +25,14 @@
 //     SMTP_SECURE: false,
 //     SMTP_USER: 'srptech63@gmail.com',  // ← YOUR GMAIL
 //     SMTP_PASS: 'gwlq piye gfbt vbwz',  // ← PUT YOUR APP PASSWORD HERE (16 chars)
-    
+
 //     // Email Settings
 //     FROM_EMAIL: 'srptech63@gmail.com',
 //     ADMIN_EMAIL: 'srptech63@gmail.com',
-    
+
 //     // Server
 //     PORT: 5000,
-    
+
 //     // Rate Limiting
 //     RATE_LIMIT_WINDOW_MS: 900000,  // 15 minutes
 //     RATE_LIMIT_MAX_REQUESTS: 5      // max 5 requests per window
@@ -45,18 +45,18 @@
 //     const now = Date.now();
 //     const windowMs = CONFIG.RATE_LIMIT_WINDOW_MS;
 //     const maxRequests = CONFIG.RATE_LIMIT_MAX_REQUESTS;
-    
+
 //     if (!ipRequestMap.has(ip)) {
 //         ipRequestMap.set(ip, []);
 //     }
-    
+
 //     const requests = ipRequestMap.get(ip);
 //     const validRequests = requests.filter(timestamp => now - timestamp < windowMs);
-    
+
 //     if (validRequests.length >= maxRequests) {
 //         return false;
 //     }
-    
+
 //     validRequests.push(now);
 //     ipRequestMap.set(ip, validRequests);
 //     return true;
@@ -100,7 +100,7 @@
 // function getAdminTemplate(data) {
 //     const { name, company, phone, email, message } = data;
 //     const date = new Date().toLocaleString();
-    
+
 //     return {
 //         subject: `🎬 New Contact: ${name} via McRae Entertainment`,
 //         html: `
@@ -132,7 +132,7 @@
 //         `,
 //         text: `
 //             🎬 McRae Entertainment - New Contact Form Submission
-            
+
 //             Name: ${name}
 //             ${company ? `Company: ${company}` : ''}
 //             Phone: ${phone}
@@ -172,11 +172,11 @@
 //         `,
 //         text: `
 //             Dear ${name},
-            
+
 //             Thank you for contacting McRae Entertainment!
-            
+
 //             We have received your message and will respond within 24 hours.
-            
+
 //             Best regards,
 //             The McRae Entertainment Team
 //         `
@@ -186,7 +186,7 @@
 // // Send email function
 // async function sendEmail({ to, subject, html, text }) {
 //     const transporter = createTransporter();
-    
+
 //     const mailOptions = {
 //         from: `"McRae Entertainment" <${CONFIG.FROM_EMAIL}>`,
 //         to: to,
@@ -194,7 +194,7 @@
 //         text: text || '',
 //         html: html || ''
 //     };
-    
+
 //     const info = await transporter.sendMail(mailOptions);
 //     return { success: true, messageId: info.messageId };
 // }
@@ -227,14 +227,14 @@
 //     try {
 //         const { testEmail } = req.body;
 //         const to = testEmail || CONFIG.ADMIN_EMAIL;
-        
+
 //         await sendEmail({
 //             to: to,
 //             subject: '🎬 McRae Entertainment - Test Email',
 //             html: '<h1 style="color:#e50914;">✅ Test Successful!</h1><p>Your email server is working correctly.</p><p>Sent from McRae Entertainment SMTP service.</p>',
 //             text: 'Test email - Your SMTP configuration is working correctly!'
 //         });
-        
+
 //         res.json({ success: true, message: 'Test email sent successfully' });
 //     } catch (error) {
 //         console.error('Test email error:', error);
@@ -246,20 +246,20 @@
 // app.post('/api/email/send-contact', async (req, res) => {
 //     try {
 //         const { name, email, message } = req.body;
-        
+
 //         // Validation
 //         const errors = [];
 //         if (!name || name.trim().length < 2) errors.push('Name is required (min 2 characters)');
 //         if (!email) errors.push('Email is required');
 //         if (!message || message.trim().length < 5) errors.push('Message is required (min 5 characters)');
-        
+
 //         const emailRegex = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
 //         if (email && !emailRegex.test(email)) errors.push('Invalid email format');
-        
+
 //         if (errors.length > 0) {
 //             return res.status(400).json({ success: false, errors });
 //         }
-        
+
 //         // Rate limiting
 //         const clientIp = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 //         if (!checkRateLimit(clientIp)) {
@@ -268,7 +268,7 @@
 //                 message: 'Too many requests. Please try again later.'
 //             });
 //         }
-        
+
 //         // Check if SMTP is configured
 //         if (!CONFIG.SMTP_PASS) {
 //             return res.status(500).json({
@@ -276,9 +276,9 @@
 //                 message: 'SMTP password not configured. Please set SMTP_PASS in the config.'
 //             });
 //         }
-        
+
 //         const formData = { name, email, message };
-        
+
 //         // Send admin notification
 //         const adminTemplate = getAdminTemplate(formData);
 //         await sendEmail({
@@ -287,7 +287,7 @@
 //             html: adminTemplate.html,
 //             text: adminTemplate.text
 //         });
-        
+
 //         // Send auto-reply to user
 //         const autoReplyTemplate = getUserAutoReplyTemplate(name);
 //         await sendEmail({
@@ -296,13 +296,13 @@
 //             html: autoReplyTemplate.html,
 //             text: autoReplyTemplate.text
 //         });
-        
+
 //         console.log(`✅ Contact form processed: ${name} (${email})`);
 //         res.json({
 //             success: true,
 //             message: 'Your message has been sent successfully! We will respond within 24 hours.'
 //         });
-        
+
 //     } catch (error) {
 //         console.error('Send contact error:', error);
 //         res.status(500).json({
@@ -336,7 +336,7 @@
 //     console.log('\n========================================');
 //     console.log('🎬 McRae Entertainment Email Server');
 //     console.log('========================================\n');
-    
+
 //     // Check SMTP password
 //     if (!CONFIG.SMTP_PASS) {
 //         console.error('❌ ERROR: SMTP_PASS is not configured!');
@@ -349,14 +349,14 @@
 //         console.error('Example: SMTP_PASS: "abcd efgh ijkl mnop" (remove spaces)\n');
 //         process.exit(1);
 //     }
-    
+
 //     // Test SMTP connection
 //     const isConnected = await testSMTPConnection();
 //     if (!isConnected) {
 //         console.error('❌ Server cannot start - SMTP connection failed\n');
 //         process.exit(1);
 //     }
-    
+
 //     // Start server
 //     app.listen(CONFIG.PORT, () => {
 //         console.log(`\n🚀 Server running on http://localhost:${CONFIG.PORT}`);
@@ -386,7 +386,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://mc-rae-three.vercel.app",
+    origin: [
+      "https://mcraeentertainment.com",
+      "https://mc-rae-three.vercel.app"
+    ],
     credentials: true,
   })
 );
@@ -400,22 +403,22 @@ app.use(express.urlencoded({ extended: true }));
 
 const CONFIG = {
 
-    SMTP_HOST: 'smtp.gmail.com',
-    SMTP_PORT: 587,
-    SMTP_SECURE: false,
-    SMTP_USER: 'srptech63@gmail.com',  // ← YOUR GMAIL
-    SMTP_PASS: 'gwlq piye gfbt vbwz',  // ← PUT YOUR APP PASSWORD HERE (16 chars)
-    
-    // Email Settings
-    FROM_EMAIL: 'srptech63@gmail.com',
-    ADMIN_EMAIL: 'srptech63@gmail.com',
-    
-    // Server
-    PORT: 5000,
-    
-    // Rate Limiting
-    RATE_LIMIT_WINDOW_MS: 900000,  // 15 minutes
-    RATE_LIMIT_MAX_REQUESTS: 5      // max 5 requests per window
+  SMTP_HOST: 'smtp.gmail.com',
+  SMTP_PORT: 587,
+  SMTP_SECURE: false,
+  SMTP_USER: 'srptech63@gmail.com',  // ← YOUR GMAIL
+  SMTP_PASS: 'gwlq piye gfbt vbwz',  // ← PUT YOUR APP PASSWORD HERE (16 chars)
+
+  // Email Settings
+  FROM_EMAIL: 'srptech63@gmail.com',
+  ADMIN_EMAIL: 'srptech63@gmail.com',
+
+  // Server
+  PORT: 5000,
+
+  // Rate Limiting
+  RATE_LIMIT_WINDOW_MS: 900000,  // 15 minutes
+  RATE_LIMIT_MAX_REQUESTS: 5      // max 5 requests per window
 };
 
 // ============================================
